@@ -35,11 +35,26 @@ public class NeivorHandler {
 		Router apiSubRouter = Router.router(vertx);
 		
 		// API Routing
+		apiSubRouter.route("/*").handler(this::defaultProcessorForNeivorAPI);
     	apiSubRouter.route("/*").handler(BodyHandler.create());
     	apiSubRouter.post("/generate-payment-order").handler(this::generatePaymentOrder);
     	apiSubRouter.get("/payment-order-state/:code").handler(this::getPaymentOrderStateByCode);
     	
 		return apiSubRouter;
+	}
+	
+	/**
+	 * Called for all default API HTTP GET, POST, PUT and DELETE. Enables cross origin
+	 * @param routingContext Represents the context for the handling of a request in Vert.x-Web.
+	 */
+	public void defaultProcessorForNeivorAPI(RoutingContext routingContext) {
+		//Allowing CORS - Cross Domain API calls
+		routingContext.response().putHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,"*");
+		routingContext.response().putHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS,"GET,POST,PUT,DELETE");
+		routingContext.response().putHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "*");
+		
+		//Call the next matching route
+    	routingContext.next();
 	}
 	
 	/**
@@ -208,7 +223,7 @@ public class NeivorHandler {
 				break;
 			case "101":
 				routingContext.response()
-					.setStatusCode(404)
+					.setStatusCode(200)
 					.putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
 					.putHeader("codError", codError)
 					.putHeader("descripcion", "NO HAY SERVICIOS PARA PROCESAR ORDEN DE PAGO")
@@ -216,7 +231,7 @@ public class NeivorHandler {
 				break;
 			case "201":
 				routingContext.response()
-					.setStatusCode(404)
+					.setStatusCode(200)
 					.putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
 					.putHeader("codError", codError)
 					.putHeader("descripcion", message)
@@ -224,7 +239,7 @@ public class NeivorHandler {
 				break;
 			case "501":
 				routingContext.response()
-					.setStatusCode(404)
+					.setStatusCode(200)
 					.putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
 					.putHeader("codError", codError)
 					.putHeader("descripcion", "PROBLEMAS CON LA CONEXION: "+message)
@@ -232,7 +247,7 @@ public class NeivorHandler {
 				break;
 			case "502":
 				routingContext.response()
-					.setStatusCode(400)
+					.setStatusCode(200)
 					.putHeader(HttpHeaders.CONTENT_TYPE, "application/json")
 					.putHeader("codError", codError)
 					.putHeader("descripcion", "CARGA UTIL NO VALIDA")

@@ -53,7 +53,7 @@ public class RoxxyHandler {
 	}
 	
 	/**
-	 * Called for all default API HTTP GET, POST, PUT and DELETE.
+	 * Called for all default API HTTP GET, POST, PUT and DELETE. Enables cross origin
 	 * The process to be executed is as follows:
 	 * <ol>
 	 * 	<li>User and password validation</li>
@@ -86,6 +86,7 @@ public class RoxxyHandler {
     		//Allowing CORS - Cross Domain API calls
     		routingContext.response().putHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,"*");
     		routingContext.response().putHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS,"GET,POST,PUT,DELETE");
+    		routingContext.response().putHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "*");
     		
     		//Call the next matching route
         	routingContext.next();

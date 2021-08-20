@@ -1,5 +1,8 @@
 package com.juant.roxxy;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.juant.roxxy.handler.NeivorHandler;
 import com.juant.roxxy.handler.RoxxyHandler;
 
@@ -7,12 +10,15 @@ import io.vertx.config.ConfigRetriever;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.mysqlclient.MySQLConnectOptions;
 import io.vertx.mysqlclient.MySQLPool;
 import io.vertx.sqlclient.PoolOptions;
+import io.vertx.ext.web.handler.CorsHandler;
 
 /**
  * Component designed to run inside Vertx. Contains web service settings for Roxxy stores
@@ -49,6 +55,31 @@ public class RoxxyVerticle extends AbstractVerticle {
     	
     	Router router = Router.router(vertx);
     	
+    	Set<String> allowedHeaders = new HashSet<>();
+        allowedHeaders.add("x-requested-with");
+        allowedHeaders.add("Access-Control-Allow-Origin");
+        allowedHeaders.add("origin");
+        allowedHeaders.add("Content-Type");
+        allowedHeaders.add("accept");
+        allowedHeaders.add("Access-Control-Expose-Headers");
+
+        Set<HttpMethod> allowedMethods = new HashSet<>();
+        allowedMethods.add(HttpMethod.GET);
+        allowedMethods.add(HttpMethod.POST);
+        allowedMethods.add(HttpMethod.DELETE);
+        allowedMethods.add(HttpMethod.PATCH);
+        allowedMethods.add(HttpMethod.OPTIONS);
+        allowedMethods.add(HttpMethod.PUT);
+
+        router.route().handler(CorsHandler.create("*")
+                .allowedHeaders(allowedHeaders)
+                .allowedMethods(allowedMethods));
+
+        router.get("/").handler(context1 -> {
+            HttpServerResponse httpServerResponse = context1.response();
+            httpServerResponse.putHeader("content-type", "text/html").end("<h1>Success</h1>");
+        });
+        
     	//Connection options for roxxy database
 		MySQLConnectOptions roxxyConnectOptions = new MySQLConnectOptions()
 				  .setPort(config().getInteger("database.port"))
