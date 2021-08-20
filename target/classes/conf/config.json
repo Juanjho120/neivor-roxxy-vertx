@@ -1,0 +1,9 @@
+{
+	"http.port" : 8080,
+	"neivor.database.name" : "heroku_f54b8dc7564275b",
+	"roxxy.database.name" : "heroku_f54b8dc7564275b",
+	"database.host" : "us-cdbr-east-04.cleardb.com",
+	"database.user" : "b01305ba66886a",
+	"database.password" : "7fe8cede",
+	"database.port" : 3306
+}

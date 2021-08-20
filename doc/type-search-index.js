@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"com.juant.roxxy.response","l":"ConsultaResponse"},{"p":"com.juant.roxxy.handler","l":"NeivorHandler"},{"p":"com.juant.roxxy.entity","l":"Pago"},{"p":"com.juant.roxxy.response","l":"ReversionResponse"},{"p":"com.juant.roxxy.handler","l":"RoxxyHandler"},{"p":"com.juant.roxxy","l":"RoxxyVerticle"}]

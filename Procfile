@@ -1,0 +1,1 @@
+web: vertx run src/main/java/RoxxyVerticle.java
